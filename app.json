@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "battery-percentage-",
+    "name": "Charge Speed",
     "slug": "snack-36f7d2c7-1992-4e1c-b985-f6e65468dee3",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/splash-icon.jpeg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -20,10 +20,16 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.vishalkapoor27.chargeSpeed"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7f8ff1a0-eec5-4c15-aa36-8299ed2b0456"
+      }
     }
   }
 }

@@ -1,5 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Button } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+} from "react-native";
 import * as Battery from "expo-battery";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -33,7 +40,10 @@ export default function App() {
         const savedStart = await AsyncStorage.getItem("chargingStartTime");
         const savedLevel = await AsyncStorage.getItem("chargingStartLevel");
         if (savedStart && savedLevel) {
-          sessionRef.current = { start: new Date(savedStart), levelAtStart: parseFloat(savedLevel) };
+          sessionRef.current = {
+            start: new Date(savedStart),
+            levelAtStart: parseFloat(savedLevel),
+          };
           startTimer();
         } else {
           startSession(level);
@@ -46,11 +56,19 @@ export default function App() {
       const level = await Battery.getBatteryLevelAsync();
       setBatteryLevel(level);
 
-      if ((batteryState === Battery.BatteryState.CHARGING || batteryState === Battery.BatteryState.FULL) && !sessionRef.current) {
+      if (
+        (batteryState === Battery.BatteryState.CHARGING ||
+          batteryState === Battery.BatteryState.FULL) &&
+        !sessionRef.current
+      ) {
         startSession(level);
       }
 
-      if (sessionRef.current && (batteryState === Battery.BatteryState.UNPLUGGED || batteryState === Battery.BatteryState.FULL)) {
+      if (
+        sessionRef.current &&
+        (batteryState === Battery.BatteryState.UNPLUGGED ||
+          batteryState === Battery.BatteryState.FULL)
+      ) {
         finishSession(level);
       }
     });
@@ -106,7 +124,8 @@ export default function App() {
         {item.from}% → {item.to}% | {item.duration.toFixed(1)} min
       </Text>
       <Text style={[styles.sessionText, darkMode && { color: "#fff" }]}>
-        {new Date(item.start).toLocaleTimeString()} → {new Date(item.end).toLocaleTimeString()}
+        {new Date(item.start).toLocaleTimeString()} →{" "}
+        {new Date(item.end).toLocaleTimeString()}
       </Text>
     </View>
   );
@@ -119,7 +138,9 @@ export default function App() {
 
   const getCurrentPercentage = () => {
     if (!sessionRef.current) return "—";
-    return `${Math.round(sessionRef.current.levelAtStart * 100)}% → ${Math.round(batteryLevel * 100)}%`;
+    return `${Math.round(
+      sessionRef.current.levelAtStart * 100
+    )}% → ${Math.round(batteryLevel * 100)}%`;
   };
 
   const toggleDarkMode = async () => {
@@ -130,12 +151,14 @@ export default function App() {
 
   return (
     <View style={[styles.container, darkMode && { backgroundColor: "#000" }]}>
-      
-
-      <Text style={[styles.header, darkMode && { color: "#fff" }]}>🔋 Charge Tracker</Text>
+      <Text style={[styles.header, darkMode && { color: "#fff" }]}>
+        🔋 Charge Tracker
+      </Text>
 
       <View style={styles.info}>
-        <Text style={darkMode && { color: "#fff" }}>Battery: {(batteryLevel * 100).toFixed(0)}%</Text>
+        <Text style={darkMode && { color: "#fff" }}>
+          Battery: {(batteryLevel * 100).toFixed(0)}%
+        </Text>
         <Text style={darkMode && { color: "#fff" }}>
           State:{" "}
           {batteryState === Battery.BatteryState.CHARGING
@@ -145,8 +168,17 @@ export default function App() {
             : "Not Charging"}
         </Text>
         <Text style={darkMode && { color: "#fff" }}>
-          Current Session: {sessionRef.current ? `${getCurrentPercentage()} | ${getCurrentDuration()}` : "Not active"}
+          Current Session:{" "}
+          {sessionRef.current
+            ? `${getCurrentPercentage()} | ${getCurrentDuration()}`
+            : "Not active"}
         </Text>
+
+        <TouchableOpacity style={styles.themeButton} onPress={toggleDarkMode}>
+          <Text style={styles.saveBtnText}>
+            {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+          </Text>
+        </TouchableOpacity>
 
         {sessionRef.current && (
           <TouchableOpacity
@@ -158,16 +190,19 @@ export default function App() {
         )}
       </View>
 
-      <Text style={[styles.subHeader, darkMode && { color: "#fff" }]}>Previous Sessions</Text>
-      <Button
-        title={darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
-        onPress={toggleDarkMode}
-      />
+      <Text style={[styles.subHeader, darkMode && { color: "#fff" }]}>
+        Previous Sessions
+      </Text>
+
       <FlatList
         data={sessions}
         renderItem={renderSession}
         keyExtractor={(item, index) => index.toString()}
-        ListEmptyComponent={<Text style={darkMode && { color: "#fff" }}>No previous sessions</Text>}
+        ListEmptyComponent={
+          <Text style={darkMode && { color: "#fff" }}>
+            No previous sessions
+          </Text>
+        }
       />
     </View>
   );
@@ -210,6 +245,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 8,
+  },
+  themeButton: {
+    marginTop: 15,
+    backgroundColor: "#218dccff",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 8,
+    width: "50%",
+    alignSelf: "center",
   },
   saveBtnText: {
     color: "#fff",
